@@ -7,9 +7,21 @@ class Product(models.Model):
         max_length=200,
         verbose_name='Название'
     )
-    url = models.CharField(
+    price = models.IntegerField(
+        verbose_name='Цена'
+    )
+    description = models.CharField(
         max_length=200,
-        verbose_name='Страница продукта'
+        verbose_name='описание'
+    )
+    image_url = models.CharField(
+        max_length=200,
+        verbose_name='Изображение товара'
+    )
+    discount = models.CharField(
+        max_length=200,
+        verbose_name='скидка',
+        null=True,
     )
 
 

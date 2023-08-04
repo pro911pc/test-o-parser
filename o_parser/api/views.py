@@ -13,6 +13,7 @@ class ProductsViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
 
     def create(self, request, *args, **kwargs):
+        #get_content_product.delay(request.data.get('products_count'))
         get_content_product(request.data.get('products_count'))
         return Response("Обработка начата")
 
