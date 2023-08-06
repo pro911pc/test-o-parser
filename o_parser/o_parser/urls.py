@@ -20,7 +20,6 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('webhook/', include('bot.urls', namespace='bot')),
     path('', include('api.urls')),
 ]
 

@@ -11,10 +11,14 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
+
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-BOT_TOKEN = os.getenv('TOKEN')
+TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
+PROXY_URL = 'https://telegg.ru/orig/bot'
 TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
 BASE_URL = 'http://localhost/'
 
@@ -45,7 +49,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'products.apps.ProductsConfig',
     'bot.apps.BotConfig',
-    
+
+
 ]
 
 MIDDLEWARE = [

@@ -6,7 +6,6 @@ from selenium.webdriver.chrome.options import Options
 import time
 from products.models import Product
 from celery import shared_task
-from api.bottelegram import sendMassage
 import re
 
 logger = logging.getLogger(__name__)
