@@ -23,6 +23,7 @@ class Product(models.Model):
         verbose_name='скидка',
         null=True,
     )
+    id_request = models.TextField(default='')
 
 
 class ProductPost(models.Model):
@@ -30,3 +31,5 @@ class ProductPost(models.Model):
         default=10,
         validators=[MaxValueValidator(50)]
     )
+    created = models.DateTimeField(db_index=True, default='2023-01-01 00:00')
+    id_request = models.TextField(default='')

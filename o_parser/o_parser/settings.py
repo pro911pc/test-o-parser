@@ -18,8 +18,8 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
-PROXY_URL = 'https://telegg.ru/orig/bot'
 TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
+PROXY_URL = 'https://telegg.ru/orig/bot'
 BASE_URL = 'http://localhost/'
 
 # Quick-start development settings - unsuitable for production
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'products.apps.ProductsConfig',
     'bot.apps.BotConfig',
+    'django_celery_results',
 
 
 ]
@@ -148,7 +149,10 @@ REST_FRAMEWORK = {
 }
 
 CELERY_BROKER_URL = "redis://localhost:6379"
-CELERY_RESULT_BACKEND = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_CACHE_BACKEND = 'django-cache'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

@@ -12,27 +12,25 @@ Celery: 5.3.1
 git clone https://github.com/pro911pc/test-o-parser.git
 
 cd test-o-parser/o_parser
-```
+
 
 Windows:
 
-```
+
 python -m venv venv
 
 source venv/Scripts/activate
-```
+
 
 Mac, Linux:
 
-```
 python3 -m venv venv
 
 . venv/bin/activate
-```
+
 
 Далее:
 
-```
 pip install -r requirements.txt
 
 python manage.py makemigrations
@@ -49,10 +47,6 @@ python manage.py runserver
 python -m celery -A o_parser worker -l info
 
 
-
-
-```
-```
 ### Автор
 Углов Дмитрий
 https://t.me/Duglov
