@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
+
 from bot.bottg import bot
-from products.models import ProductPost, Product
+from products.models import Product, ProductPost
 
 
 class Command(BaseCommand):

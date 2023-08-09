@@ -1,13 +1,10 @@
-from bs4 import BeautifulSoup
-import requests
 import logging
-import undetected_chromedriver as uc
-from selenium.webdriver.chrome.options import Options
-import time
-from products.models import Product
-from celery import shared_task
 import re
+import undetected_chromedriver as uc
+from bs4 import BeautifulSoup
+
 from bot.bottg import send_message
+from products.models import Product
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +15,7 @@ URL = URL_BASE + '/seller/1/products/'
 class Content:
 
     def __init__(self, current_url):
-        self.current_url = current_url 
+        self.current_url = current_url
         self.page = 0
 
 
@@ -43,7 +40,7 @@ def get_int_value(value):
     if value:
         numbers = re.findall('[0-9]+', value)
         return ''.join(numbers)
-    return 0
+    return None
 
 
 def get_value(name, content, teg, listclass):
@@ -82,12 +79,31 @@ def get_name(content):
     return ''
 
 
+def grt_price(content):
+    price_class = ['c3-a1 tsHeadline500Medium c3-b9']
+    price_span = get_value('price', content, 'span', price_class)
+    if price_span:
+        price_str = price_span.text
+        price = get_int_value(price_str)
+        if price:
+            return price
+    return 0
+
+
 def get_url_product(content):
     url_product_class = ['tile-hover-target yh3 h4y',
                          'il9 tile-hover-target']
     url_product_a = get_value('url_product', content, 'a', url_product_class)
     if url_product_a:
         return url_product_a['href']
+    return ''
+
+
+def get_image_url(content):
+    image_url_class = ['c9-a']
+    image_url_img = get_value('image_url', content, 'img', image_url_class)
+    if image_url_img:
+        return image_url_img['src']
     return ''
 
 
@@ -103,7 +119,15 @@ def get_description(url_product):
     return ''
 
 
-@shared_task
+def get_discount(content):
+    discount_class = ['tsBodyControl400Small c3-a2 c3-a7 c3-b1']
+    discount_span = get_value('discount', content, 'span', discount_class)
+    if discount_span:
+        return discount_span.text
+    return None
+
+
+#@shared_task
 def get_content_product(products_count=10, id_request=''):
     send_message('start')
     try:
@@ -121,26 +145,14 @@ def get_content_product(products_count=10, id_request=''):
                 if len(products) == 0:
                     break
                 for product in products:
-                    price_class = 'c3-a1 tsHeadline500Medium c3-b9'
-                    price_str = product.find('span',
-                                             class_=price_class).text
-                    price = get_int_value(price_str)
                     url_description = URL_BASE+get_url_product(product)
                     description = get_description(url_description)
-                    image_url = product.find('img', class_='c9-a')['src']
-                    discount_class = 'tsBodyControl400Small c3-a2 c3-a7 c3-b1'
-                    discount_span = product.find('span',
-                                                 class_=discount_class)
-                    discount = None
-                    if discount_span:
-                        discount = discount_span.text
-
                     Product.objects.create(
                                         name=get_name(product),
-                                        price=price,
+                                        price=grt_price(product),
                                         description=description,
-                                        image_url=image_url,
-                                        discount=discount,
+                                        image_url=get_image_url(product),
+                                        discount=get_discount(product),
                                         id_request=id_request)
                     i += 1
                     if int(products_count or 10)-1 < i:

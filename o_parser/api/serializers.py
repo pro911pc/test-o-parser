@@ -1,5 +1,6 @@
-from rest_framework import serializers
 from django.core.validators import MaxValueValidator
+from rest_framework import serializers
+
 from products.models import Product, ProductPost
 
 
@@ -17,7 +18,8 @@ class ProductPostSerializer(serializers.ModelSerializer):
 
     def validate_products_count(self, value):
         if value > 50:
-            raise serializers.ValidationError("Максимальное значение products_count 50")
+            raise serializers.ValidationError("Максимальное значение\
+                                               products_count 50")
         return value
 
     class Meta:
