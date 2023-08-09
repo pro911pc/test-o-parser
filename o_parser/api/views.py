@@ -20,7 +20,7 @@ class ProductsViewSet(viewsets.ModelViewSet):
         products_count = request.data.get('products_count')
         current_datetime = datetime.now(tz=timezone.utc)
         id_request = uuid.uuid4()
-        get_content_product.apply_async((products_count, id_request))
+        get_content_product.delay(products_count, id_request)
         ProductPost.objects.create(products_count=products_count,
                                    created=current_datetime,
                                    id_request=id_request)

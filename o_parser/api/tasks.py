@@ -2,7 +2,7 @@ import logging
 import re
 import undetected_chromedriver as uc
 from bs4 import BeautifulSoup
-
+from celery import shared_task
 from bot.bottg import send_message
 from products.models import Product
 
@@ -127,7 +127,7 @@ def get_discount(content):
     return None
 
 
-#@shared_task
+@shared_task
 def get_content_product(products_count=10, id_request=''):
     send_message('start')
     try:
